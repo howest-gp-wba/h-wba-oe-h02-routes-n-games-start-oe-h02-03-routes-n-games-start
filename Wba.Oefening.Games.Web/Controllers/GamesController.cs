@@ -39,20 +39,19 @@ namespace Wba.Oefening.Games.Web.Controllers
 
         public IActionResult Index()
         {
-            //get the games
-            var games = _gameRepository.GetGames();
-            //pass to the Format method
-            //and return to the client
-            return Content(_formatService.FormatGameInfo(games), "text/html");
+            IEnumerable<Game> games = _gameRepository.GetGames();
+            return Content($"{FormatGameInfo(games)}", "text/html");
         }
 
         private string FormatGameInfo(Game game)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Id: {game?.Id ?? 0}");
-            sb.AppendLine($"Title: {game?.Title ?? "no title"}");
-            sb.AppendLine($"Developer: {game?.Developer?.Name ?? "no developer"}");
-            sb.AppendLine($"Rating: {game?.Rating ?? 0}");
+            sb.AppendLine("<ul>");
+            sb.AppendLine($"<li>Id: {game?.Id ?? 0}</li>");
+            sb.AppendLine($"<li>Title: {game?.Title ?? "no title"}</li>");
+            sb.AppendLine($"<li>Developer: {game?.Developer?.Name ?? "no developer"}</li>");
+            sb.AppendLine($"<li>Rating: {game?.Rating ?? 0}</li>");
+            sb.AppendLine("</ul>");
             string gameInfo = sb.ToString();
 
             return gameInfo;
@@ -60,11 +59,12 @@ namespace Wba.Oefening.Games.Web.Controllers
 
         private string FormatGameInfo(IEnumerable<Game> games)
         {
-            string gameInfo = string.Empty;
+            string gameInfo = "<ul>";
             foreach (Game game in games)
             {
-                gameInfo += $"{FormatGameInfo(game)}\n\n";
+                gameInfo += $"<li>Game {game.Id}{FormatGameInfo(game)}</li>";
             }
+            gameInfo += "</ul>";
 
             return gameInfo;
         }
