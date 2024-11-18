@@ -21,7 +21,7 @@ namespace Wba.Oefening.Games.Web.Controllers
         /**
          * show the info of one game
          */
-        public IActionResult ShowGame(int id)
+        /*public IActionResult ShowGame(int id)
         {
             //get the game using the id(FirstOrDefault)
             var game = _gameRepository
@@ -35,12 +35,22 @@ namespace Wba.Oefening.Games.Web.Controllers
             //return content => FormatGameInfo(Game)
             var title = game.Title;
             return Content(_formatService.FormatGameInfo(game), "text/html");
-        }
+        }*/
 
         public IActionResult Index()
         {
             IEnumerable<Game> games = _gameRepository.GetGames();
             return Content($"{FormatGameInfo(games)}", "text/html");
+        }
+
+        public IActionResult ShowGame(int id)
+        {
+            IEnumerable<Game> games = _gameRepository.GetGames();
+            Game searchedGame = games.FirstOrDefault(game => game.Id == id);
+
+            if (searchedGame == null) return NotFound();
+
+            return Content(FormatGameInfo(searchedGame), "text/html");
         }
 
         private string FormatGameInfo(Game game)
