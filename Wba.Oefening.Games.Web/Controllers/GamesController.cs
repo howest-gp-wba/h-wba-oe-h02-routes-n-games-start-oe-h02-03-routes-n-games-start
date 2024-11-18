@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Text;
 using Wba.Oefening.Games.Core.Entities;
 using Wba.Oefening.Games.Core.Repositories;
@@ -53,6 +54,17 @@ namespace Wba.Oefening.Games.Web.Controllers
             sb.AppendLine($"Developer: {game?.Developer?.Name ?? "no developer"}");
             sb.AppendLine($"Rating: {game?.Rating ?? 0}");
             string gameInfo = sb.ToString();
+
+            return gameInfo;
+        }
+
+        private string FormatGameInfo(IEnumerable<Game> games)
+        {
+            string gameInfo = string.Empty;
+            foreach (Game game in games)
+            {
+                gameInfo += $"{FormatGameInfo(game)}\n\n";
+            }
 
             return gameInfo;
         }
