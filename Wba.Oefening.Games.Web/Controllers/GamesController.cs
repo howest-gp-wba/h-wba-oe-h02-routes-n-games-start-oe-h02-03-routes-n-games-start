@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text;
 using Wba.Oefening.Games.Core.Entities;
 using Wba.Oefening.Games.Core.Repositories;
 using Wba.Oefening.Games.Web.Services;
@@ -42,6 +43,18 @@ namespace Wba.Oefening.Games.Web.Controllers
             //pass to the Format method
             //and return to the client
             return Content(_formatService.FormatGameInfo(games), "text/html");
+        }
+
+        private string FormatGameInfo(Game game)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"Id: {game?.Id ?? 0}");
+            sb.AppendLine($"Title: {game?.Title ?? "no title"}");
+            sb.AppendLine($"Developer: {game?.Developer?.Name ?? "no developer"}");
+            sb.AppendLine($"Rating: {game?.Rating ?? 0}");
+            string gameInfo = sb.ToString();
+
+            return gameInfo;
         }
     }
 }
