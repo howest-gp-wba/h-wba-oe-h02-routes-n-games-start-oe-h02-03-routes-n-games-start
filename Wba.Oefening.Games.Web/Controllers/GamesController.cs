@@ -43,10 +43,10 @@ namespace Wba.Oefening.Games.Web.Controllers
             return Content($"{FormatGameInfo(games)}", "text/html");
         }
 
-        public IActionResult ShowGame(int id)
+        public IActionResult ShowGame(int gameId)
         {
             IEnumerable<Game> games = _gameRepository.GetGames();
-            Game searchedGame = games.FirstOrDefault(game => game.Id == id);
+            Game searchedGame = games.FirstOrDefault(game => game.Id == gameId);
 
             if (searchedGame == null) return NotFound();
 
