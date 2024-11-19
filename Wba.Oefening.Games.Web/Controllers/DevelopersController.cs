@@ -16,7 +16,8 @@ namespace Wba.Oefening.Games.Web.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            IEnumerable<Developer> allDevelopers = _developerRepository.GetDevelopers();
+            return Content(FormatDeveloperInfo(allDevelopers), "text/html");
         }
 
         private string FormatDeveloperInfo(Developer developer)
