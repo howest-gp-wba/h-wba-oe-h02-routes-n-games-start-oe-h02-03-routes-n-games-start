@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using Wba.Oefening.Games.Core.Entities;
 using Wba.Oefening.Games.Core.Repositories;
@@ -32,10 +33,19 @@ namespace Wba.Oefening.Games.Web.Controllers
 
         private string FormatDeveloperInfo(Developer developer)
         {
+            int developerId = developer?.Id ?? 0;
+            string developerName = developer?.Name ?? "unknown";
+
+            if (developerName != "unknown")
+            {
+                string developerLink = $"<a href=\"/Developers/{developerId}\">{developerName}</a>";
+                developerName = developerLink;
+            }
+
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"<ul>");
-            sb.AppendLine($"<li>Id: {developer?.Id ?? 0}</li>");
-            sb.AppendLine($"<li>Name: {developer?.Name ?? "unknown"}</li>");
+            sb.AppendLine($"<li>Id: {developerId}</li>");
+            sb.AppendLine($"<li>Name: {developerName}</li>");
             sb.AppendLine($"</ul>");
             string developerInfo = sb.ToString();
 

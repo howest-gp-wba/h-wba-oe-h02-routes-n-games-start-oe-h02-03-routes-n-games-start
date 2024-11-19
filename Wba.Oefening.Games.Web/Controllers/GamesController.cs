@@ -55,12 +55,30 @@ namespace Wba.Oefening.Games.Web.Controllers
 
         private string FormatGameInfo(Game game)
         {
+            int gameId = game?.Id ?? 0;
+            string gameTitle = game?.Title ?? "unknown";
+            string developerName = game?.Developer?.Name ?? "unknown";
+            int gameRating = game?.Rating ?? 0;
+
+            if (gameTitle != "unknown")
+            {
+                string gameLink = $"<a href=\"/Games/{gameId}\">{gameTitle}</a>";
+                gameTitle = gameLink;
+            }
+
+            if (developerName != "unknown")
+            {
+                int developerId = game?.Developer?.Id ?? 0;
+                string developerLink = $"<a href=\"/Developers/{developerId}\">{developerName}</a>";
+                developerName = developerLink;
+            }
+
             StringBuilder sb = new StringBuilder();
             sb.AppendLine("<ul>");
-            sb.AppendLine($"<li>Id: {game?.Id ?? 0}</li>");
-            sb.AppendLine($"<li>Title: {game?.Title ?? "no title"}</li>");
-            sb.AppendLine($"<li>Developer: {game?.Developer?.Name ?? "no developer"}</li>");
-            sb.AppendLine($"<li>Rating: {game?.Rating ?? 0}</li>");
+            sb.AppendLine($"<li>Id: {gameId}</li>");
+            sb.AppendLine($"<li>Title: {gameTitle}</li>");
+            sb.AppendLine($"<li>Developer: {developerName}</li>");
+            sb.AppendLine($"<li>Rating: {gameRating}</li>");
             sb.AppendLine("</ul>");
             string gameInfo = sb.ToString();
 
