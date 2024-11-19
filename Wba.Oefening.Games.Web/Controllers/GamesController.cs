@@ -18,29 +18,12 @@ namespace Wba.Oefening.Games.Web.Controllers
             _formatService = new FormatService();
         }
 
-        /**
-         * show the info of one game
-         */
-        /*public IActionResult ShowGame(int id)
-        {
-            //get the game using the id(FirstOrDefault)
-            var game = _gameRepository
-                .GetGames()
-                .FirstOrDefault(g => g.Id == id);
-            //check if null
-            if (game == null)
-            {
-                return NotFound();
-            }
-            //return content => FormatGameInfo(Game)
-            var title = game.Title;
-            return Content(_formatService.FormatGameInfo(game), "text/html");
-        }*/
-
         public IActionResult Index()
         {
             IEnumerable<Game> games = _gameRepository.GetGames();
-            return Content($"{FormatGameInfo(games)}", "text/html");
+            string infoAllGames = _formatService.FormatGameInfo(games);
+
+            return Content(infoAllGames, "text/html");
         }
 
         public IActionResult ShowGame(int gameId)
@@ -50,51 +33,9 @@ namespace Wba.Oefening.Games.Web.Controllers
 
             if (searchedGame == null) return NotFound();
 
-            return Content(FormatGameInfo(searchedGame), "text/html");
-        }
+            string infoSearchedGame = _formatService.FormatGameInfo(searchedGame);
 
-        private string FormatGameInfo(Game game)
-        {
-            int gameId = game?.Id ?? 0;
-            string gameTitle = game?.Title ?? "unknown";
-            string developerName = game?.Developer?.Name ?? "unknown";
-            int gameRating = game?.Rating ?? 0;
-
-            if (gameTitle != "unknown")
-            {
-                string gameLink = $"<a href=\"/Games/{gameId}\">{gameTitle}</a>";
-                gameTitle = gameLink;
-            }
-
-            if (developerName != "unknown")
-            {
-                int developerId = game?.Developer?.Id ?? 0;
-                string developerLink = $"<a href=\"/Developers/{developerId}\">{developerName}</a>";
-                developerName = developerLink;
-            }
-
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("<ul>");
-            sb.AppendLine($"<li>Id: {gameId}</li>");
-            sb.AppendLine($"<li>Title: {gameTitle}</li>");
-            sb.AppendLine($"<li>Developer: {developerName}</li>");
-            sb.AppendLine($"<li>Rating: {gameRating}</li>");
-            sb.AppendLine("</ul>");
-            string gameInfo = sb.ToString();
-
-            return gameInfo;
-        }
-
-        private string FormatGameInfo(IEnumerable<Game> games)
-        {
-            string gameInfo = "<ul>";
-            foreach (Game game in games)
-            {
-                gameInfo += $"<li>Game {game.Id}{FormatGameInfo(game)}</li>";
-            }
-            gameInfo += "</ul>";
-
-            return gameInfo;
+            return Content(infoSearchedGame, "text/html");
         }
     }
 }
