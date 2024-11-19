@@ -3,22 +3,27 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using Wba.Oefening.Games.Core.Entities;
 using Wba.Oefening.Games.Core.Repositories;
+using Wba.Oefening.Games.Web.Services;
 
 namespace Wba.Oefening.Games.Web.Controllers
 {
     public class DevelopersController : Controller
     {
         private readonly DeveloperRepository _developerRepository;
+        private readonly FormatService _formatService;
 
         public DevelopersController()
         {
             _developerRepository = new DeveloperRepository();
+            _formatService = new FormatService();
         }
 
         public IActionResult Index()
         {
             IEnumerable<Developer> allDevelopers = _developerRepository.GetDevelopers();
-            return Content(FormatDeveloperInfo(allDevelopers), "text/html");
+            string infoAllDevelopers = _formatService.FormatDeveloperInfo(allDevelopers);
+
+            return Content(infoAllDevelopers, "text/html");
         }
 
         public IActionResult ShowDeveloper(int developerId)
@@ -28,40 +33,9 @@ namespace Wba.Oefening.Games.Web.Controllers
 
             if (searchedDeveloper == null) return NotFound();
 
-            return Content(FormatDeveloperInfo(searchedDeveloper), "text/html");
-        }
+            string infoSearchedDeveloper = _formatService.FormatDeveloperInfo(searchedDeveloper);
 
-        private string FormatDeveloperInfo(Developer developer)
-        {
-            int developerId = developer?.Id ?? 0;
-            string developerName = developer?.Name ?? "unknown";
-
-            if (developerName != "unknown")
-            {
-                string developerLink = $"<a href=\"/Developers/{developerId}\">{developerName}</a>";
-                developerName = developerLink;
-            }
-
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"<ul>");
-            sb.AppendLine($"<li>Id: {developerId}</li>");
-            sb.AppendLine($"<li>Name: {developerName}</li>");
-            sb.AppendLine($"</ul>");
-            string developerInfo = sb.ToString();
-
-            return developerInfo;
-        }
-
-        private string FormatDeveloperInfo(IEnumerable<Developer> developers)
-        {
-            string developerInfo = "<ul>";
-            foreach (Developer developer in developers)
-            {
-                developerInfo += $"<li>Developer {developer.Id}{FormatDeveloperInfo(developer)}</li>";
-            }
-            developerInfo += "</ul>";
-
-            return developerInfo;
+            return Content(infoSearchedDeveloper, "text/html");
         }
     }
 }

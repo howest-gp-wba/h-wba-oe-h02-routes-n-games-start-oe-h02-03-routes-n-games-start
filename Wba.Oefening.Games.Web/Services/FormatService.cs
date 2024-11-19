@@ -5,6 +5,39 @@ namespace Wba.Oefening.Games.Web.Services
 {
     public class FormatService : IFormatService
     {
+        public string FormatDeveloperInfo(Developer developer)
+        {
+            int developerId = developer?.Id ?? 0;
+            string developerName = developer?.Name ?? "unknown";
+
+            if (developerName != "unknown")
+            {
+                string developerLink = $"<a href=\"/Developers/{developerId}\">{developerName}</a>";
+                developerName = developerLink;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"<ul>");
+            sb.AppendLine($"<li>Id: {developerId}</li>");
+            sb.AppendLine($"<li>Name: {developerName}</li>");
+            sb.AppendLine($"</ul>");
+            string developerInfo = sb.ToString();
+
+            return developerInfo;
+        }
+
+        public string FormatDeveloperInfo(IEnumerable<Developer> developers)
+        {
+            string developerInfo = "<ul>";
+            foreach (Developer developer in developers)
+            {
+                developerInfo += $"<li>Developer {developer.Id}{FormatDeveloperInfo(developer)}</li>";
+            }
+            developerInfo += "</ul>";
+
+            return developerInfo;
+        }
+
         public string FormatGameInfo(Game game)
         {
             int gameId = game?.Id ?? 0;
