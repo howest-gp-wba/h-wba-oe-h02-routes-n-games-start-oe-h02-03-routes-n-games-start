@@ -20,6 +20,16 @@ namespace Wba.Oefening.Games.Web.Controllers
             return Content(FormatDeveloperInfo(allDevelopers), "text/html");
         }
 
+        public IActionResult ShowDeveloper(int developerId)
+        {
+            IEnumerable<Developer> allDevelopers = _developerRepository.GetDevelopers();
+            Developer searchedDeveloper = allDevelopers.FirstOrDefault(dev => dev.Id == developerId);
+
+            if (searchedDeveloper == null) return NotFound();
+
+            return Content(FormatDeveloperInfo(searchedDeveloper), "text/html");
+        }
+
         private string FormatDeveloperInfo(Developer developer)
         {
             StringBuilder sb = new StringBuilder();
